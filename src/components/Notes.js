@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Note from './Note';
+import {BrowserRouter, Route, NavLink} from 'react-router-dom';
+import SeparateNote from './SeparateNote';
 
 const styles = theme => ({
     root: {
@@ -60,39 +62,47 @@ class Notes extends Component {
     render() {
         const { classes } = this.props;
         return(
-            <div className={classes.root}>
-                <Header />
-                <br />
-                <br />
-                <Grid container spacing={12} justify="center">                    
-                    <Grid item xs={6}>
-                        <NoteForm 
-                            title={this.state.title}
-                            takeANote={this.state.takeANote}
-                            showTitle={this.state.showTitle}
-                            handleTitle={this.handleTitle}
-                            handleNote={this.handleNote}
-                            handleSubmit={this.handleSubmit}
-                            handleShowTitle={this.handleShowTitle}
-                        />
+            <BrowserRouter>
+                <Fragment>
+                    <Route path='/card/:id' render={(props) => {
+                        return <SeparateNote {...props} data={this.state.cardLists} />
+                    }} />
+               
+                <div className={classes.root}>
+                    <Header />
+                    <br />
+                    <br />                
+                    <Grid container spacing={12} justify="center">                    
+                        <Grid item xs={6}>
+                            <NoteForm 
+                                title={this.state.title}
+                                takeANote={this.state.takeANote}
+                                showTitle={this.state.showTitle}
+                                handleTitle={this.handleTitle}
+                                handleNote={this.handleNote}
+                                handleSubmit={this.handleSubmit}
+                                handleShowTitle={this.handleShowTitle}
+                            />
+                        </Grid>
                     </Grid>
-                </Grid>
-                <br />
-                <br />
-                <Grid container spacing={16} justify="center">
-                    {
-                        this.state.cardLists.map(card => {
-                           return (<Grid item xs={3}>
-                                <Note
-                                    title={card.title}
-                                    takeANote={card.takeANote}
-                                />
-                            </Grid>)
-                        })
-                    }     
-                </Grid>
+                    <br />
+                    <br />
+                    <Grid container spacing={16} justify="center">
+                        {
+                            this.state.cardLists.map((card, index) => {
+                            return (<Grid item xs={3}>
+                                    <NavLink to={`/card/${index}`}><Note
+                                        title={card.title}
+                                        takeANote={card.takeANote}
+                                    /></NavLink>
+                                </Grid>)
+                            })
+                        }     
+                    </Grid>
 
-            </div>
+                </div>
+                </Fragment>
+            </BrowserRouter>    
         )
     }
 }
