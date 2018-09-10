@@ -6,6 +6,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import {browserHistory} from 'react-router-dom'
 
 const styles = {
   card: {
@@ -25,27 +26,38 @@ const styles = {
   },
 };
 
-function SeparateNote(props) {
-  const { classes } = props;
-  const bull = <span className={classes.bullet}>•</span>;
+class SeparateNote extends React.Component {
+  constructor(props) {
+    super(props)   
+  }
 
-  return (
-    <div>
-      <Card className={classes.card}>
-        <CardContent>
+  goBack = () => {
+    this.props.history.goBack();
+  }
 
-          <Typography variant="headline" component="h2">
-            {props.data[props.match.params.id].title}
-          </Typography>
-         
-          <Typography component="p">
-            {props.data[props.match.params.id].takeANote}   
-          </Typography>
+  render() {
+    const { classes } = this.props;
+    const bull = <span className={classes.bullet}>•</span>;
 
-        </CardContent>        
-      </Card>
-    </div>
-  );
+    return (
+      <div>
+        <Card className={classes.card}>
+          <CardContent>
+            <button onClick={this.goBack}>Back</button><br /><br />
+            <Typography variant="headline" component="h2">
+              {this.props.data[this.props.match.params.id].title}
+            </Typography>
+          
+            <Typography component="p">
+              {this.props.data[this.props.match.params.id].takeANote}   
+            </Typography>
+
+          </CardContent>        
+        </Card>
+      </div>
+    );
+  }
+  
 }
 
 SeparateNote.propTypes = {
